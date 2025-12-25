@@ -9,12 +9,12 @@ import { getAuth, signInAnonymously } from "firebase/auth";
 
 // --- BAGIAN 2: KONFIGURASI KREDENSIAL (WAJIB DIISI UNTUK FULL ONLINE) ---
 const firebaseConfig = {
-  apiKey: "AIzaSyC0sfhxT8cmISmM9llIL8xzm4Uw0v8Uue0",
-  authDomain: "ongkir-mfg.firebaseapp.com",
-  projectId: "ongkir-mfg",
-  storageBucket: "ongkir-mfg.firebasestorage.app",
-  messagingSenderId: "688469956664",
-  appId: "1:688469956664:web:c9d9325894469fae01aecd"
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID
 };
 
 // --- DATA MENTAH WILAYAH (DATA STANDAR SEBELUM KONEK DATABASE) ---
@@ -722,7 +722,7 @@ export default function App() {
                             <h3 className="text-xs font-bold text-white uppercase tracking-widest">Portal Mitra</h3>
                         </div>
 
-                        <a href="https://mfg-portal.vercel.app" target="_blank" rel="noopener noreferrer" className="block w-full group">
+                        <a href="https://mfg-portal.vercel.app/" target="_blank" rel="noopener noreferrer" className="block w-full group">
                             <button className="w-full relative overflow-hidden bg-slate-900/50 hover:bg-emerald-600 border border-emerald-500/30 text-white py-2.5 rounded-xl transition-all duration-300 group-hover:shadow-[0_0_20px_rgba(16,185,129,0.4)]">
                                 <div className="relative z-10 flex items-center justify-center gap-2">
                                     <span className="font-bold tracking-widest text-xs uppercase group-hover:scale-105 transition-transform">Integrated Mitra</span>
