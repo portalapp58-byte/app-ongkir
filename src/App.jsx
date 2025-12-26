@@ -595,20 +595,7 @@ export default function App() {
     <div className="min-h-screen font-sans relative overflow-x-hidden bg-slate-900 text-white selection:bg-emerald-500 selection:text-white">
       
       {/* --- BACKGROUND --- */}
-      <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
-        <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-800 via-slate-900 to-black"></div>
-        <div className="absolute top-[-10%] right-[-10%] w-[600px] h-[600px] bg-emerald-500/20 rounded-full blur-[100px]"></div>
-        <div className="absolute bottom-[-10%] left-[-10%] w-[500px] h-[500px] bg-teal-500/20 rounded-full blur-[100px] delay-1000"></div>
-        <motion.div 
-          initial={{ opacity: 0, x: 50 }}
-          animate={{ opacity: 0.15, x: 0, y: [0, -20, 0] }}
-          transition={{ opacity: { duration: 2 }, x: { duration: 1 }, y: { repeat: Infinity, duration: 4, ease: "easeInOut" } }}
-          className="absolute top-24 -right-12 z-0 w-80 h-80 pointer-events-none transform rotate-[-10deg] filter drop-shadow-[0_0_20px_rgba(255,255,255,0.5)]"
-        >
-          <img src="https://cdn-icons-png.flaticon.com/512/3214/3214746.png" alt="Casper Ghost" className="w-full h-full object-contain mix-blend-screen opacity-60" />
-        </motion.div>
-        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 brightness-150 contrast-150"></div>
-      </div>
+      <div className="fixed inset-0 z-0 bg-gradient-to-b from-slate-800 to-slate-950"></div>
 
       <div className="relative z-10 max-w-md mx-auto h-[100dvh] flex flex-col shadow-2xl bg-white/5 backdrop-blur-md border-x border-white/10 overflow-hidden">
         
