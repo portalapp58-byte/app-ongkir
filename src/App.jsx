@@ -8,14 +8,18 @@ import { getFirestore, doc, getDoc, setDoc } from "firebase/firestore";
 import { getAuth, signInAnonymously } from "firebase/auth";
 
 // --- BAGIAN 2: KONFIGURASI KREDENSIAL (WAJIB DIISI UNTUK FULL ONLINE) ---
+// Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
-  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
-  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
-  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
-  appId: import.meta.env.VITE_FIREBASE_APP_ID
+  apiKey: "AIzaSyC0sfhxT8cmISmM9llIL8xzm4Uw0v8Uue0",
+  authDomain: "ongkir-mfg.firebaseapp.com",
+  projectId: "ongkir-mfg",
+  storageBucket: "ongkir-mfg.firebasestorage.app",
+  messagingSenderId: "688469956664",
+  appId: "1:688469956664:web:c9d9325894469fae01aecd"
 };
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
 
 // --- DATA MENTAH WILAYAH (DATA STANDAR SEBELUM KONEK DATABASE) ---
 const RAW_DATA = [
