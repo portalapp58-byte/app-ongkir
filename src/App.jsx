@@ -17,6 +17,9 @@ const firebaseConfig = {
   appId: import.meta.env.VITE_FIREBASE_APP_ID
 };
 
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+
 // --- DATA MENTAH WILAYAH (DATA STANDAR SEBELUM KONEK DATABASE) ---
 const RAW_DATA = [
   // ================= KOTA MALANG (5 KECAMATAN) =================
