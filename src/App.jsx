@@ -597,7 +597,7 @@ export default function App() {
       {/* --- BACKGROUND --- */}
       <div className="fixed inset-0 z-0 bg-gradient-to-b from-slate-800 to-slate-950"></div>
 
-      <div className="relative z-10 max-w-md mx-auto h-[100dvh] flex flex-col shadow-2xl bg-white/5 backdrop-blur-md border-x border-white/10 overflow-hidden">
+      <div className="relative z-10 max-w-md mx-auto h-[100dvh] flex flex-col bg-slate-900 border-x border-white/10 overflow-hidden">
         
         {/* --- HEADER (COMPACT) --- */}
         <header className="pt-12 pb-1 px-6 text-center shrink-0">
