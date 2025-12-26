@@ -807,8 +807,7 @@ export default function App() {
         <footer className="shrink-0 p-3 text-center pb-10">
           <div className="space-y-0.5 mb-2 text-slate-400/60">
             <h3 className="font-bold text-slate-300 text-xs tracking-wide">Workshop Malang Florist Group</h3>
-            <p className="text-[10px] font-light">Jl. Candi Bajangratu 1 Selatan No 16 B</p>
-            <p className="text-[10px] font-light">Kota Malang - Jawa Timur</p>
+            <p className="text-[10px] font-light">Jl. Candi Bajangratu 1 Selatan No 16 B - Kota Malang</p>    
           </div>
 
           <div className="flex justify-between items-center px-4 border-t border-white/5 pt-2">
