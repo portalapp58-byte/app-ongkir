@@ -821,7 +821,7 @@ export default function App() {
                 <span className="text-[7px] text-emerald-500/60 font-bold uppercase tracking-wider mt-0.5">Created By Malang Florist Group</span>
             </div>
             <div className="w-8 flex justify-center">
-               {navigator.onLine ? <Cloud size={12} className="text-emerald-500 animate-pulse" title="Online" /> : <CloudOff size={12} className="text-slate-700" title="Offline" />}
+               {isFirebaseReady ? <Cloud size={12} className="text-emerald-500 animate-pulse" title="Cloud Connected" /> : <CloudOff size={12} className="text-slate-700" title="Local Mode" />}
             </div>
           </div>
         </footer>
