@@ -607,10 +607,10 @@ export default function App() {
         <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 brightness-150 contrast-150"></div>
       </div>
 
-      <div className="relative z-10 max-w-md mx-auto h-screen flex flex-col shadow-2xl bg-white/5 backdrop-blur-md border-x border-white/10 overflow-hidden">
+      <div className="relative z-10 max-w-md mx-auto h-[100dvh] flex flex-col shadow-2xl bg-white/5 backdrop-blur-md border-x border-white/10 overflow-hidden">
         
         {/* --- HEADER (COMPACT) --- */}
-        <header className="pt-5 pb-1 px-6 text-center shrink-0">
+        <header className="pt-12 pb-1 px-6 text-center shrink-0">
           <motion.div 
             initial={{ scale: 0, rotate: -180 }} animate={{ scale: 1, rotate: 0 }} 
             className="w-14 h-14 mx-auto mb-1 flex items-center justify-center rounded-2xl bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_0_30px_rgba(16,185,129,0.3)] group hover:shadow-[0_0_50px_rgba(16,185,129,0.6)] transition-all duration-500"
@@ -804,7 +804,7 @@ export default function App() {
         </AnimatePresence>
 
         {/* --- FOOTER (COMPACT) --- */}
-        <footer className={`shrink-0 p-3 text-center ${showPopup ? 'pb-32' : 'pb-2'}`}>
+        <footer className={`shrink-0 p-3 text-center ${showPopup ? 'pb-36' : 'pb-10'}`}>
           <div className="space-y-0.5 mb-2 text-slate-400/60">
             <h3 className="font-bold text-slate-300 text-xs tracking-wide">Workshop Malang Florist Group</h3>
             <p className="text-[10px] font-light">Jl. Candi Bajangratu 1 Selatan No 16 B</p>
