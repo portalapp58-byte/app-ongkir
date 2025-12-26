@@ -804,7 +804,7 @@ export default function App() {
         </AnimatePresence>
 
         {/* --- FOOTER (COMPACT) --- */}
-        <footer className={`shrink-0 p-3 text-center ${showPopup ? 'pb-36' : 'pb-10'}`}>
+        <footer className="shrink-0 p-3 text-center pb-10">
           <div className="space-y-0.5 mb-2 text-slate-400/60">
             <h3 className="font-bold text-slate-300 text-xs tracking-wide">Workshop Malang Florist Group</h3>
             <p className="text-[10px] font-light">Jl. Candi Bajangratu 1 Selatan No 16 B</p>
