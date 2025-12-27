@@ -618,7 +618,7 @@ export default function App() {
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} delay={0.2}
             className="text-[9px] font-bold tracking-[0.3em] text-emerald-300/80 uppercase mt-0.5 border-b border-white/10 pb-1 inline-block"
           >
-            Malang Florist Group
+            Malang Florist Group | Casper Team
           </motion.p>
         </header>
 
