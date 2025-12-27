@@ -612,13 +612,13 @@ export default function App() {
             className="text-xl font-black text-white tracking-tight drop-shadow-2xl"
             style={{ textShadow: '0 0 1px rgba(255,255,255,0.5)' }}
           >
-            MFG <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-300 filter drop-shadow-sm">Integrated System</span>
+            MFG <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-300 filter drop-shadow-sm">CEK ONGKIR</span>
           </motion.h1>
           <motion.p 
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} delay={0.2}
             className="text-[9px] font-bold tracking-[0.3em] text-emerald-300/80 uppercase mt-0.5 border-b border-white/10 pb-1 inline-block"
           >
-            Digital Ecosystem v2.0
+            Malang Florist Group
           </motion.p>
         </header>
 
