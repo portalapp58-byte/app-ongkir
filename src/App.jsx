@@ -628,7 +628,7 @@ export default function App() {
         </header>
 
         {/* --- MAIN CONTENT --- */}
-        <main className="flex-1 px-6 overflow-y-auto custom-scrollbar flex flex-col justify-center gap-6 pb-24 relative z-0">
+        <main className="flex-1 px-6 overflow-y-auto custom-scrollbar flex flex-col relative z-0 pb-4">
           
           {isLoading ? (
              <div className="flex flex-col items-center justify-center py-20 space-y-4 flex-1">
@@ -637,88 +637,95 @@ export default function App() {
              </div>
           ) : (
             <>
-                {/* CARD CEK ONGKIR */}
-                <motion.div 
-                    initial={{ y: 20, opacity: 0 }}
-                    animate={{ y: 0, opacity: 1 }}
-                    className="bg-slate-800/40 backdrop-blur-md rounded-3xl p-6 border border-white/10 shadow-xl relative overflow-hidden"
-                >
-                    <div className="absolute top-0 right-0 p-4 opacity-20"><Truck className="w-20 h-20 text-white transform rotate-[-15deg] translate-x-4 -translate-y-4" /></div>
-                    
-                    <div className="relative z-10 space-y-5">
-                        {/* INPUT KECAMATAN */}
-                        <div>
-                            <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2 block flex items-center gap-1"><Navigation size={12} /> Area Kecamatan</label>
-                            <div className="relative group">
-                                <select
-                                    value={selectedKecamatanId}
-                                    onChange={handleKecamatanChange}
-                                    className="w-full bg-slate-900/80 border border-slate-700 text-sm text-white rounded-xl px-4 py-3.5 appearance-none focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all font-medium"
-                                >
-                                    <option value="">Pilih Kecamatan...</option>
-                                    <optgroup label="KOTA MALANG" className="bg-slate-800 font-bold">
-                                        {data.filter(d => d.type === 'Kota Malang').map(item => <option key={item.id} value={item.id}>{item.name}</option>)}
-                                    </optgroup>
-                                    <optgroup label="KABUPATEN MALANG" className="bg-slate-800 font-bold">
-                                        {data.filter(d => d.type === 'Kab. Malang').map(item => <option key={item.id} value={item.id}>{item.name}</option>)}
-                                    </optgroup>
-                                </select>
-                                <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 w-4 h-4 pointer-events-none" />
-                            </div>
-                        </div>
-
-                        {/* INPUT DESA */}
-                        <div>
-                            <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2 block flex items-center gap-1"><MapPin size={12} /> Desa / Kelurahan</label>
-                            <div className="relative group">
-                                <select
-                                    value={selectedVillageName}
-                                    onChange={handleVillageChange}
-                                    disabled={!selectedKecamatanData}
-                                    className={`w-full bg-slate-900/80 border text-sm text-white rounded-xl px-4 py-3.5 appearance-none focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all font-medium ${!selectedKecamatanData ? 'border-slate-800 opacity-50 cursor-not-allowed' : 'border-slate-700'}`}
-                                >
-                                    <option value="">{selectedKecamatanData ? "Pilih Tujuan..." : "Menunggu Kecamatan..."}</option>
-                                    {selectedKecamatanData?.villages.sort((a,b) => a.name.localeCompare(b.name)).map((v, idx) => <option key={idx} value={v.name}>{v.name}</option>)}
-                                </select>
-                                <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 w-4 h-4 pointer-events-none" />
-                            </div>
-                        </div>
-
-                        {/* BUTTON CEK */}
-                        <motion.button
-                            whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}
-                            onClick={handleCheckOngkir}
-                            disabled={!selectedVillageName}
-                            className={`w-full py-4 rounded-xl font-bold uppercase tracking-widest text-sm shadow-lg flex items-center justify-center gap-2 transition-all ${selectedVillageName ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-emerald-500/25 hover:shadow-emerald-500/40' : 'bg-slate-800 text-slate-600 cursor-not-allowed'}`}
-                        >
-                           <Search size={16} /> Hitung Ongkir
-                        </motion.button>
-                    </div>
-                </motion.div>
-
-                {/* INFO PROMO */}
-                <AnimatePresence>
-                    {globalFreeShipping && (
-                        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="bg-gradient-to-r from-rose-600 to-pink-600 text-white p-4 rounded-2xl flex items-center gap-4 shadow-lg shadow-pink-900/20">
-                            <div className="bg-white/20 p-2.5 rounded-full"><Truck size={18} /></div>
+                <div className="flex-1 flex flex-col justify-center gap-6">
+                    {/* CARD CEK ONGKIR */}
+                    <motion.div 
+                        initial={{ y: 20, opacity: 0 }}
+                        animate={{ y: 0, opacity: 1 }}
+                        className="bg-slate-800/40 backdrop-blur-md rounded-3xl p-6 border border-white/10 shadow-xl relative overflow-hidden"
+                    >
+                        <div className="absolute top-0 right-0 p-4 opacity-20"><Truck className="w-20 h-20 text-white transform rotate-[-15deg] translate-x-4 -translate-y-4" /></div>
+                        
+                        <div className="relative z-10 space-y-5">
+                            {/* INPUT KECAMATAN */}
                             <div>
-                                <p className="text-[10px] font-bold uppercase opacity-80 mb-0.5">Promo Spesial</p>
-                                <p className="text-sm font-bold">GRATIS ONGKIR DIAKTIFKAN!</p>
+                                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2 block flex items-center gap-1"><Navigation size={12} /> Area Kecamatan</label>
+                                <div className="relative group">
+                                    <select
+                                        value={selectedKecamatanId}
+                                        onChange={handleKecamatanChange}
+                                        className="w-full bg-slate-900/80 border border-slate-700 text-sm text-white rounded-xl px-4 py-3.5 appearance-none focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all font-medium"
+                                    >
+                                        <option value="">Pilih Kecamatan...</option>
+                                        <optgroup label="KOTA MALANG" className="bg-slate-800 font-bold">
+                                            {data.filter(d => d.type === 'Kota Malang').map(item => <option key={item.id} value={item.id}>{item.name}</option>)}
+                                        </optgroup>
+                                        <optgroup label="KABUPATEN MALANG" className="bg-slate-800 font-bold">
+                                            {data.filter(d => d.type === 'Kab. Malang').map(item => <option key={item.id} value={item.id}>{item.name}</option>)}
+                                        </optgroup>
+                                    </select>
+                                    <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 w-4 h-4 pointer-events-none" />
+                                </div>
                             </div>
-                        </motion.div>
-                    )}
-                </AnimatePresence>
+
+                            {/* INPUT DESA */}
+                            <div>
+                                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2 block flex items-center gap-1"><MapPin size={12} /> Desa / Kelurahan</label>
+                                <div className="relative group">
+                                    <select
+                                        value={selectedVillageName}
+                                        onChange={handleVillageChange}
+                                        disabled={!selectedKecamatanData}
+                                        className={`w-full bg-slate-900/80 border text-sm text-white rounded-xl px-4 py-3.5 appearance-none focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all font-medium ${!selectedKecamatanData ? 'border-slate-800 opacity-50 cursor-not-allowed' : 'border-slate-700'}`}
+                                    >
+                                        <option value="">{selectedKecamatanData ? "Pilih Tujuan..." : "Menunggu Kecamatan..."}</option>
+                                        {selectedKecamatanData?.villages.sort((a,b) => a.name.localeCompare(b.name)).map((v, idx) => <option key={idx} value={v.name}>{v.name}</option>)}
+                                    </select>
+                                    <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 w-4 h-4 pointer-events-none" />
+                                </div>
+                            </div>
+
+                            {/* BUTTON CEK */}
+                            <motion.button
+                                whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}
+                                onClick={handleCheckOngkir}
+                                disabled={!selectedVillageName}
+                                className={`w-full py-4 rounded-xl font-bold uppercase tracking-widest text-sm shadow-lg flex items-center justify-center gap-2 transition-all ${selectedVillageName ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-emerald-500/25 hover:shadow-emerald-500/40' : 'bg-slate-800 text-slate-600 cursor-not-allowed'}`}
+                            >
+                            <Search size={16} /> Hitung Ongkir
+                            </motion.button>
+                        </div>
+                    </motion.div>
+
+                    {/* INFO PROMO */}
+                    <AnimatePresence>
+                        {globalFreeShipping && (
+                            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="bg-gradient-to-r from-rose-600 to-pink-600 text-white p-4 rounded-2xl flex items-center gap-4 shadow-lg shadow-pink-900/20">
+                                <div className="bg-white/20 p-2.5 rounded-full"><Truck size={18} /></div>
+                                <div>
+                                    <p className="text-[10px] font-bold uppercase opacity-80 mb-0.5">Promo Spesial</p>
+                                    <p className="text-sm font-bold">GRATIS ONGKIR DIAKTIFKAN!</p>
+                                </div>
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
+                </div>
 
                 {/* DESCRIPTION (NEW) */}
-                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2 }} className="text-center px-2">
+                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2 }} className="text-center px-2 mt-auto pt-4 pb-2">
                     <div className="flex items-center justify-center gap-2 mb-2">
                         <Info size={14} className="text-emerald-500" />
                         <h3 className="text-emerald-500 font-bold text-xs uppercase tracking-widest">Tentang Layanan MFG</h3>
                     </div>
-                    <p className="text-[11px] text-slate-400 leading-relaxed font-light">
+                    <p className="text-[11px] text-slate-400 leading-relaxed font-light mb-3">
                         Sistem Cek Ongkir Malang Florist Group (MFG) didesain khusus untuk memastikan akurasi biaya pengiriman bunga Anda. 
                         Mencakup 5 Kecamatan di Kota Malang (Free Ongkir) dan 30+ Kecamatan di Kabupaten Malang dengan tarif yang disesuaikan secara real-time berdasarkan jarak tempuh dan medan lokasi.
                     </p>
+                    <div className="inline-block border-t border-white/5 pt-3">
+                         <p className="text-[10px] text-slate-500 font-medium tracking-wide">
+                            Workshop: <span className="text-slate-400">Jl. Candi Bajangratu 1 Selatan No16 B - Kota Malang</span>
+                        </p>
+                    </div>
                 </motion.div>
             </>
           )}
