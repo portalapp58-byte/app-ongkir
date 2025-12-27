@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import { MapPin, Truck, Lock, X, Save, ChevronDown, ChevronRight, Navigation, Users, Trash2, Plus, Flower, CheckCircle, AlertCircle, ExternalLink, Globe, LogOut, Search, Cloud, CloudOff, RefreshCw } from 'lucide-react';
+import { MapPin, Truck, Lock, X, Save, ChevronDown, ChevronRight, Navigation, Users, Trash2, Plus, Flower, CheckCircle, AlertCircle, ExternalLink, Globe, LogOut, Search, Cloud, CloudOff, RefreshCw, Home, Settings, Info } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 // --- BAGIAN 1: IMPOR FIREBASE ---
@@ -7,7 +7,7 @@ import { initializeApp } from "firebase/app";
 import { getFirestore, doc, getDoc, setDoc } from "firebase/firestore";
 import { getAuth, signInAnonymously } from "firebase/auth";
 
-// Your web app's Firebase configuration
+// Your web app's Firebase configuration (TIDAK DIUBAH)
 const firebaseConfig = {
   apiKey: "AIzaSyC0sfhxT8cmISmM9llIL8xzm4Uw0v8Uue0",
   authDomain: "ongkir-mfg.firebaseapp.com",
@@ -20,7 +20,7 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
-// --- DATA MENTAH WILAYAH (DATA STANDAR SEBELUM KONEK DATABASE) ---
+// --- DATA MENTAH WILAYAH (DATA STANDAR) ---
 const RAW_DATA = [
   // ================= KOTA MALANG (5 KECAMATAN) =================
   {
@@ -347,15 +347,15 @@ export default function App() {
   const [selectedVillageName, setSelectedVillageName] = useState('');
   const [showPopup, setShowPopup] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  
+   
   // Admin State
   const [isAdminOpen, setIsAdminOpen] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [passwordInput, setPasswordInput] = useState('');
   const [loggedInUser, setLoggedInUser] = useState(null);
-  
+   
   const [globalFreeShipping, setGlobalFreeShipping] = useState(false);
-  
+   
   const [activeTab, setActiveTab] = useState('dashboard');
   const [expandedKecamatan, setExpandedKecamatan] = useState(null);
   const [hasChanges, setHasChanges] = useState(false);
@@ -365,7 +365,7 @@ export default function App() {
       { id: 1, name: 'Owner MFG', role: 'Super Admin', pass: 'admin123' },
       { id: 2, name: 'Admin Gudang', role: 'Staff', pass: 'gudang123' }
   ]);
-  
+   
   const [newUser, setNewUser] = useState('');
   const [newPass, setNewPass] = useState('');
   const [newRole, setNewRole] = useState('Staff');
@@ -383,7 +383,7 @@ export default function App() {
           const app = initializeApp(firebaseConfig);
           const auth = getAuth(app);
           const firestore = getFirestore(app);
-          
+           
           await signInAnonymously(auth);
           setDb(firestore);
           setIsFirebaseReady(true);
@@ -419,7 +419,7 @@ export default function App() {
 
           } catch (err) {
             console.error("Error fetching data from Firebase:", err);
-            alert("Gagal mengambil data dari Cloud. Pastikan koneksi internet stabil.");
+            // alert("Gagal mengambil data dari Cloud. Pastikan koneksi internet stabil.");
           }
 
         } catch (error) {
@@ -590,407 +590,357 @@ export default function App() {
     }
   };
 
-  // --- RENDER COMPONENT ---
+  // --- RENDER COMPONENT (RE-DESIGNED) ---
   return (
-    <div className="min-h-screen font-sans relative overflow-x-hidden bg-slate-900 text-white selection:bg-emerald-500 selection:text-white">
+    <div className="min-h-screen font-sans relative overflow-hidden bg-slate-950 text-white selection:bg-emerald-500 selection:text-white">
       
-      {/* --- BACKGROUND --- */}
-      <div className="fixed inset-0 z-0 bg-gradient-to-b from-slate-800 to-slate-950"></div>
+      {/* --- BACKGROUND EFFECT --- */}
+      <div className="fixed inset-0 z-0">
+          <div className="absolute top-[-10%] left-[-20%] w-[60%] h-[60%] bg-emerald-500/10 rounded-full blur-[120px]"></div>
+          <div className="absolute bottom-[-10%] right-[-20%] w-[60%] h-[60%] bg-teal-500/10 rounded-full blur-[120px]"></div>
+      </div>
 
-      <div className="relative z-10 max-w-md mx-auto h-[100dvh] flex flex-col bg-slate-900 border-x border-white/10 overflow-hidden">
+      <div className="relative z-10 max-w-md mx-auto h-[100dvh] flex flex-col bg-slate-900/40 backdrop-blur-sm border-x border-white/5 overflow-hidden shadow-2xl">
         
-        {/* --- HEADER (COMPACT) --- */}
-        <header className="pt-12 pb-1 px-6 text-center shrink-0">
+        {/* --- HEADER --- */}
+        <header className="pt-8 pb-6 px-6 text-center shrink-0">
           <motion.div 
-            initial={{ scale: 0, rotate: -180 }} animate={{ scale: 1, rotate: 0 }} 
-            className="w-14 h-14 mx-auto mb-1 flex items-center justify-center rounded-2xl bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_0_30px_rgba(16,185,129,0.3)] group hover:shadow-[0_0_50px_rgba(16,185,129,0.6)] transition-all duration-500"
+            initial={{ scale: 0, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}
+            className="flex items-center justify-center gap-3 mb-3"
           >
-            <Flower className="text-emerald-400 w-8 h-8 group-hover:scale-110 group-hover:rotate-180 transition-all duration-700 ease-in-out drop-shadow-[0_0_10px_rgba(52,211,153,0.8)]" />
+            <div className="w-16 h-16 rounded-2xl bg-gradient-to-tr from-emerald-500 to-teal-400 flex items-center justify-center shadow-lg shadow-emerald-500/30">
+                <Flower className="text-white w-8 h-8" />
+            </div>
           </motion.div>
+          
           <motion.h1 
             initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }}
-            className="text-xl font-black text-white tracking-tight drop-shadow-2xl"
-            style={{ textShadow: '0 0 1px rgba(255,255,255,0.5)' }}
+            className="text-3xl font-black text-white tracking-tight leading-none"
           >
-            MFG <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-300 filter drop-shadow-sm">CEK ONGKIR</span>
+            MFG <span className="text-emerald-400">CEK ONGKIR</span>
           </motion.h1>
           <motion.p 
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} delay={0.2}
-            className="text-[9px] font-bold tracking-[0.3em] text-emerald-300/80 uppercase mt-0.5 border-b border-white/10 pb-1 inline-block"
+            className="text-[10px] font-medium tracking-[0.2em] text-slate-400 uppercase mt-2"
           >
-            Malang Florist Group | Casper Team
+            Malang Florist Group System
           </motion.p>
         </header>
 
-        {/* --- MAIN FORM (COMPACT) --- */}
-        <main className="flex-1 px-6 space-y-2 overflow-y-auto custom-scrollbar flex flex-col justify-center">
+        {/* --- MAIN CONTENT --- */}
+        <main className="flex-1 px-6 overflow-y-auto custom-scrollbar flex flex-col justify-center gap-6 pb-24 relative z-0">
           
           {isLoading ? (
-             <div className="flex flex-col items-center justify-center py-10 space-y-4">
-                 <RefreshCw className="animate-spin text-emerald-500 w-8 h-8" />
-                 <p className="text-xs text-slate-400 animate-pulse">Menghubungkan ke Cloud Database...</p>
+             <div className="flex flex-col items-center justify-center py-20 space-y-4 flex-1">
+                 <RefreshCw className="animate-spin text-emerald-500 w-10 h-10" />
+                 <p className="text-xs text-slate-400 animate-pulse font-medium tracking-wide">Menghubungkan Database...</p>
              </div>
           ) : (
             <>
-                {/* KOTAK 1: CEK ONGKIR */}
+                {/* CARD CEK ONGKIR */}
                 <motion.div 
                     initial={{ y: 20, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
-                    className="bg-white/10 backdrop-blur-xl rounded-[1.5rem] p-4 shadow-[0_8px_32px_rgba(0,0,0,0.3)] border border-white/20 relative overflow-hidden group shrink-0"
+                    className="bg-slate-800/40 backdrop-blur-md rounded-3xl p-6 border border-white/10 shadow-xl relative overflow-hidden"
                 >
-                    <div className="absolute top-[-50%] left-[-50%] w-[200%] h-[200%] bg-gradient-to-br from-white/10 to-transparent rotate-45 pointer-events-none"></div>
-
-                    <div className="relative z-10 mb-2 flex items-center gap-2">
-                        <Truck className="w-4 h-4 text-emerald-400" />
-                        <h3 className="text-xs font-bold text-white uppercase tracking-widest">Cek Tarif Pengiriman</h3>
-                    </div>
-
-                    <div className="mb-2 relative z-10">
-                        <label className="block text-[9px] font-bold text-slate-400 uppercase mb-0.5 ml-1 tracking-wider">Area Pengiriman</label>
-                        <div className="relative group/input">
-                            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                <Navigation className="h-4 w-4 text-emerald-400 group-focus-within/input:text-emerald-300 transition-colors shadow-emerald-500/50" />
+                    <div className="absolute top-0 right-0 p-4 opacity-20"><Truck className="w-20 h-20 text-white transform rotate-[-15deg] translate-x-4 -translate-y-4" /></div>
+                    
+                    <div className="relative z-10 space-y-5">
+                        {/* INPUT KECAMATAN */}
+                        <div>
+                            <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2 block flex items-center gap-1"><Navigation size={12} /> Area Kecamatan</label>
+                            <div className="relative group">
+                                <select
+                                    value={selectedKecamatanId}
+                                    onChange={handleKecamatanChange}
+                                    className="w-full bg-slate-900/80 border border-slate-700 text-sm text-white rounded-xl px-4 py-3.5 appearance-none focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all font-medium"
+                                >
+                                    <option value="">Pilih Kecamatan...</option>
+                                    <optgroup label="KOTA MALANG" className="bg-slate-800 font-bold">
+                                        {data.filter(d => d.type === 'Kota Malang').map(item => <option key={item.id} value={item.id}>{item.name}</option>)}
+                                    </optgroup>
+                                    <optgroup label="KABUPATEN MALANG" className="bg-slate-800 font-bold">
+                                        {data.filter(d => d.type === 'Kab. Malang').map(item => <option key={item.id} value={item.id}>{item.name}</option>)}
+                                    </optgroup>
+                                </select>
+                                <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 w-4 h-4 pointer-events-none" />
                             </div>
-                            <select
-                                value={selectedKecamatanId}
-                                onChange={handleKecamatanChange}
-                                className="block w-full pl-9 pr-8 py-2.5 text-xs text-white bg-slate-900/50 border border-white/10 rounded-xl focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50 focus:bg-slate-800/80 transition-all appearance-none cursor-pointer font-medium tracking-wide shadow-inner"
-                            >
-                                <option value="" className="text-slate-500">Cari Lokasi Kecamatan...</option>
-                                <optgroup label="KOTA MALANG" className="bg-slate-800 text-emerald-400 font-bold">
-                                    {data.filter(d => d.type === 'Kota Malang').map(item => <option key={item.id} value={item.id} className="text-white">{item.name}</option>)}
-                                </optgroup>
-                                <optgroup label="KABUPATEN MALANG" className="bg-slate-800 text-teal-400 font-bold">
-                                    {data.filter(d => d.type === 'Kab. Malang').map(item => <option key={item.id} value={item.id} className="text-white">{item.name}</option>)}
-                                </optgroup>
-                            </select>
-                            <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-emerald-500/50"><ChevronDown className="h-4 w-4" /></div>
                         </div>
-                    </div>
 
-                    <div className="overflow-hidden relative z-10">
-                        <div className="mb-1 pt-2 border-t border-white/10">
-                            <label className="block text-[9px] font-bold text-slate-400 uppercase mb-0.5 ml-1 tracking-wider">Titik Tujuan (Desa/Kel)</label>
-                            <div className="relative group/input">
-                                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                    <MapPin className={`h-4 w-4 transition-colors ${selectedKecamatanData ? 'text-emerald-400' : 'text-slate-600'}`} />
-                                </div>
+                        {/* INPUT DESA */}
+                        <div>
+                            <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2 block flex items-center gap-1"><MapPin size={12} /> Desa / Kelurahan</label>
+                            <div className="relative group">
                                 <select
                                     value={selectedVillageName}
                                     onChange={handleVillageChange}
                                     disabled={!selectedKecamatanData}
-                                    className={`block w-full pl-9 pr-8 py-2.5 text-xs text-white bg-slate-900/50 border border-white/10 rounded-xl focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50 focus:bg-slate-800/80 transition-all appearance-none font-medium tracking-wide shadow-inner ${!selectedKecamatanData ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'}`}
+                                    className={`w-full bg-slate-900/80 border text-sm text-white rounded-xl px-4 py-3.5 appearance-none focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all font-medium ${!selectedKecamatanData ? 'border-slate-800 opacity-50 cursor-not-allowed' : 'border-slate-700'}`}
                                 >
-                                    <option value="" className="text-slate-500">{selectedKecamatanData ? "Pilih Kelurahan..." : "Pilih Area Pengiriman Terlebih Dahulu..."}</option>
-                                    {selectedKecamatanData?.villages.sort((a,b) => a.name.localeCompare(b.name)).map((v, idx) => <option key={idx} value={v.name} className="text-white bg-slate-800">{v.name}</option>)}
+                                    <option value="">{selectedKecamatanData ? "Pilih Tujuan..." : "Menunggu Kecamatan..."}</option>
+                                    {selectedKecamatanData?.villages.sort((a,b) => a.name.localeCompare(b.name)).map((v, idx) => <option key={idx} value={v.name}>{v.name}</option>)}
                                 </select>
-                                <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-emerald-500/50"><ChevronDown className="h-4 w-4" /></div>
+                                <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 w-4 h-4 pointer-events-none" />
                             </div>
                         </div>
 
+                        {/* BUTTON CEK */}
                         <motion.button
-                            initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
-                            whileHover={{ scale: selectedVillageName ? 1.02 : 1 }} whileTap={{ scale: selectedVillageName ? 0.98 : 1 }}
-                            onClick={handleCheckOngkir} disabled={!selectedVillageName}
-                            className={`w-full mt-2 py-2.5 rounded-xl font-bold uppercase tracking-widest text-xs transition-all shadow-lg flex items-center justify-center gap-2 ${selectedVillageName ? 'bg-gradient-to-r from-emerald-500 to-teal-400 text-slate-900 hover:shadow-[0_0_20px_rgba(16,185,129,0.4)] cursor-pointer' : 'bg-slate-800/50 text-slate-600 border border-slate-700 cursor-not-allowed'}`}
+                            whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}
+                            onClick={handleCheckOngkir}
+                            disabled={!selectedVillageName}
+                            className={`w-full py-4 rounded-xl font-bold uppercase tracking-widest text-sm shadow-lg flex items-center justify-center gap-2 transition-all ${selectedVillageName ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-emerald-500/25 hover:shadow-emerald-500/40' : 'bg-slate-800 text-slate-600 cursor-not-allowed'}`}
                         >
-                            <Search size={14} className={selectedVillageName ? 'animate-pulse' : ''} /> CEK ONGKIR
+                           <Search size={16} /> Hitung Ongkir
                         </motion.button>
-                    </div>
-                </motion.div>
-                
-                {/* KOTAK 2: PORTAL MITRA */}
-                <motion.div 
-                    initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.1 }}
-                    className="bg-white/10 backdrop-blur-xl rounded-[1.5rem] p-4 shadow-[0_8px_32px_rgba(0,0,0,0.3)] border border-white/20 relative overflow-hidden shrink-0"
-                >
-                    <div className="absolute top-[-50%] left-[-50%] w-[200%] h-[200%] bg-gradient-to-br from-white/10 to-transparent rotate-45 pointer-events-none"></div>
-                    
-                    <div className="relative z-10">
-                        <div className="flex items-center gap-2 mb-2">
-                            <Globe className="w-4 h-4 text-emerald-400" />
-                            <h3 className="text-xs font-bold text-white uppercase tracking-widest">Portal Mitra</h3>
-                        </div>
-
-                        <a href="https://mfg-portal.vercel.app/" target="_blank" rel="noopener noreferrer" className="block w-full group">
-                            <button className="w-full relative overflow-hidden bg-slate-900/50 hover:bg-emerald-600 border border-emerald-500/30 text-white py-2.5 rounded-xl transition-all duration-300 group-hover:shadow-[0_0_20px_rgba(16,185,129,0.4)]">
-                                <div className="relative z-10 flex items-center justify-center gap-2">
-                                    <span className="font-bold tracking-widest text-xs uppercase group-hover:scale-105 transition-transform">Integrated Mitra</span>
-                                    <ExternalLink size={14} className="text-emerald-400 group-hover:text-white transition-colors" />
-                                </div>
-                                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-emerald-500/20 to-transparent -translate-x-full group-hover:animate-[shimmer_1.5s_infinite]"></div>
-                            </button>
-                        </a>
-                        <p className="text-[9px] text-slate-400 mt-1.5 text-center italic leading-tight opacity-70">Akses khusus mitra untuk manajemen pesanan dan laporan.</p>
                     </div>
                 </motion.div>
 
                 {/* INFO PROMO */}
                 <AnimatePresence>
                     {globalFreeShipping && (
-                        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="bg-gradient-to-r from-pink-600/90 to-rose-600/90 backdrop-blur-md border border-pink-400/30 text-white p-3 rounded-xl flex items-center gap-3 shadow-[0_0_20px_rgba(244,63,94,0.4)] shrink-0">
-                            <div className="bg-white/20 p-2 rounded-full shadow-inner"><Truck size={16} /></div>
-                            <div className="flex-1">
-                                <p className="text-[9px] font-bold uppercase tracking-wider text-pink-200">Limited Time Offer</p>
-                                <p className="text-xs font-bold">GRATIS ONGKIR DIAKTIFKAN!</p>
+                        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="bg-gradient-to-r from-rose-600 to-pink-600 text-white p-4 rounded-2xl flex items-center gap-4 shadow-lg shadow-pink-900/20">
+                            <div className="bg-white/20 p-2.5 rounded-full"><Truck size={18} /></div>
+                            <div>
+                                <p className="text-[10px] font-bold uppercase opacity-80 mb-0.5">Promo Spesial</p>
+                                <p className="text-sm font-bold">GRATIS ONGKIR DIAKTIFKAN!</p>
                             </div>
                         </motion.div>
                     )}
                 </AnimatePresence>
+
+                {/* DESCRIPTION (NEW) */}
+                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2 }} className="text-center px-2">
+                    <div className="flex items-center justify-center gap-2 mb-2">
+                        <Info size={14} className="text-emerald-500" />
+                        <h3 className="text-emerald-500 font-bold text-xs uppercase tracking-widest">Tentang Layanan MFG</h3>
+                    </div>
+                    <p className="text-[11px] text-slate-400 leading-relaxed font-light">
+                        Sistem Cek Ongkir Malang Florist Group (MFG) didesain khusus untuk memastikan akurasi biaya pengiriman bunga Anda. 
+                        Mencakup 5 Kecamatan di Kota Malang (Free Ongkir) dan 30+ Kecamatan di Kabupaten Malang dengan tarif yang disesuaikan secara real-time berdasarkan jarak tempuh dan medan lokasi.
+                    </p>
+                </motion.div>
             </>
           )}
         </main>
 
-        {/* --- POPUP RESULT --- */}
+        {/* --- POPUP RESULT (MODERN SHEET) --- */}
         <AnimatePresence>
           {showPopup && selectedVillageData && (
-            <div className="fixed inset-x-0 bottom-0 z-40 max-w-md mx-auto pointer-events-none flex flex-col justify-end h-screen">
+            <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center pointer-events-none">
+              <motion.div 
+                 initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+                 className="absolute inset-0 bg-black/60 backdrop-blur-sm pointer-events-auto"
+                 onClick={() => setShowPopup(false)}
+              />
               <motion.div
-                initial={{ y: '100%', opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: 0, opacity: 0 }}
+                initial={{ y: '100%' }} animate={{ y: 0 }} exit={{ y: '100%' }}
                 transition={{ type: "spring", damping: 25, stiffness: 300 }}
-                className="pointer-events-auto bg-slate-900/95 backdrop-blur-xl rounded-t-[3rem] shadow-[0_-10px_60px_rgba(16,185,129,0.2)] border-t border-emerald-500/30 p-6 pb-10 relative overflow-hidden"
+                className="bg-slate-900 w-full max-w-md rounded-t-[2.5rem] sm:rounded-[2.5rem] border-t border-white/10 pointer-events-auto relative overflow-hidden shadow-2xl"
               >
-                 <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-1 bg-emerald-500 shadow-[0_0_20px_rgba(16,185,129,1)] rounded-full mb-8"></div>
-                <button onClick={() => setShowPopup(false)} className="absolute top-6 right-6 w-8 h-8 flex items-center justify-center bg-white/5 text-slate-400 rounded-full hover:bg-rose-500/20 hover:text-rose-500 border border-white/5 hover:border-rose-500/50 transition-all"><X size={18} /></button>
-                
-                <div className="text-center mb-6 mt-4">
-                  <span className="inline-block px-4 py-1 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 rounded-full text-[10px] font-bold tracking-[0.2em] uppercase mb-4 shadow-[0_0_15px_rgba(16,185,129,0.1)]">BIAYA TAMBAHAN ONGKIR</span>
-                  <div className="flex items-center justify-center gap-2 text-white">
-                    <span className="text-xl font-medium text-slate-500 mt-2">Rp</span>
-                    <span className="text-6xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-white to-slate-400 drop-shadow-2xl">{getFinalPrice().toLocaleString('id-ID')}</span>
-                  </div>
-                  {getFinalPrice() === 0 && <span className="text-sm text-pink-500 font-bold mt-2 block animate-pulse tracking-widest border border-pink-500/30 px-3 py-1 rounded-lg bg-pink-500/10 inline-block">FREE ONGKIR</span>}
-                </div>
-
-                <div className="grid grid-cols-2 gap-3 mb-4">
-                  <div className="bg-white/5 p-4 rounded-3xl border border-white/5 hover:border-emerald-500/30 transition-colors group">
-                    <p className="text-[10px] text-slate-500 uppercase font-bold mb-1 tracking-wider">Jarak Tempuh</p>
-                    <div className="flex items-center gap-2">
-                      <Navigation size={16} className="text-emerald-500 group-hover:drop-shadow-[0_0_8px_rgba(16,185,129,0.8)] transition-all" />
-                      <span className="font-bold text-lg text-white">{selectedKecamatanData.distance}</span>
+                 <div className="p-8 pb-10">
+                    <div className="flex justify-center mb-6">
+                        <div className="w-12 h-1.5 bg-slate-700 rounded-full"></div>
                     </div>
-                  </div>
-                  <div className="bg-white/5 p-4 rounded-3xl border border-white/5 hover:border-emerald-500/30 transition-colors group">
-                     <p className="text-[10px] text-slate-500 uppercase font-bold mb-1 tracking-wider">Lokasi</p>
-                     <div className="flex items-center gap-2">
-                       <MapPin size={16} className="text-emerald-500 group-hover:drop-shadow-[0_0_8px_rgba(16,185,129,0.8)] transition-all" />
-                       <span className="font-bold text-lg text-white truncate">{selectedVillageName}</span>
-                     </div>
-                  </div>
-                </div>
 
-                <div className={`p-4 rounded-3xl border flex gap-4 items-start relative overflow-hidden transition-all ${getFinalPrice() === 0 ? 'bg-gradient-to-br from-emerald-900/30 to-teal-900/30 border-emerald-500/30' : 'bg-slate-800/50 border-white/10'}`}>
-                  {getFinalPrice() > 0 ? (<AlertCircle className="text-amber-400 w-6 h-6 flex-shrink-0 mt-0.5 shadow-amber-500/20" />) : (<div className="relative"><div className="absolute inset-0 bg-emerald-500 blur-lg opacity-40 animate-pulse"></div><CheckCircle className="text-emerald-400 w-6 h-6 flex-shrink-0 mt-0.5 relative z-10 animate-[pulse_2s_infinite]" /></div>)}
-                  <div className="relative z-10">
-                    <h4 className={`text-xs font-bold uppercase mb-1 tracking-wide ${getFinalPrice() > 0 ? 'text-amber-400' : 'text-emerald-400'}`}>Informasi MFG</h4>
-                    <p className="text-xs text-slate-300 leading-relaxed font-light">
-                      {getFinalPrice() > 0 ? (<>Alamat Tersebut Sudah Memasuki Kawasan Kabupaten Malang dan dikenakan tambahan ongkir.<br/><span className="text-emerald-400 font-bold">Free ongkir Tercover Seluruh KOTA MALANG.</span></>) : (<span className="font-medium text-white flex flex-col gap-1">Area Ini Sudah Tercover Area Free Ongkir Pengiriman<span className="flex gap-1 mt-1"><span className="w-1 h-1 bg-emerald-400 rounded-full animate-bounce delay-75"></span><span className="w-1 h-1 bg-emerald-400 rounded-full animate-bounce delay-150"></span><span className="w-1 h-1 bg-emerald-400 rounded-full animate-bounce delay-300"></span></span></span>)}
-                    </p>
-                  </div>
-                </div>
+                    <div className="text-center mb-8">
+                        <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Estimasi Biaya Kirim</p>
+                        <div className="flex items-start justify-center gap-1 text-white">
+                            <span className="text-lg font-medium text-emerald-500 mt-2">Rp</span>
+                            <span className="text-6xl font-black tracking-tighter">{getFinalPrice().toLocaleString('id-ID')}</span>
+                        </div>
+                        {getFinalPrice() === 0 && <span className="inline-block mt-3 px-3 py-1 bg-pink-500/10 border border-pink-500/50 text-pink-500 text-[10px] font-bold rounded-full uppercase tracking-wider">Free Ongkir</span>}
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-4 mb-6">
+                        <div className="bg-slate-800/50 p-4 rounded-2xl border border-white/5">
+                            <p className="text-[10px] text-slate-500 uppercase font-bold mb-1">Jarak</p>
+                            <div className="flex items-center gap-2 text-white font-bold"><Navigation size={14} className="text-emerald-500" /> {selectedKecamatanData.distance}</div>
+                        </div>
+                        <div className="bg-slate-800/50 p-4 rounded-2xl border border-white/5">
+                            <p className="text-[10px] text-slate-500 uppercase font-bold mb-1">Tujuan</p>
+                            <div className="flex items-center gap-2 text-white font-bold truncate"><MapPin size={14} className="text-emerald-500" /> {selectedVillageName}</div>
+                        </div>
+                    </div>
+
+                    <div className={`p-5 rounded-2xl border flex gap-4 ${getFinalPrice() === 0 ? 'bg-emerald-900/20 border-emerald-500/20' : 'bg-slate-800/30 border-slate-700'}`}>
+                        {getFinalPrice() > 0 ? <AlertCircle className="text-amber-400 shrink-0" /> : <CheckCircle className="text-emerald-400 shrink-0" />}
+                        <div>
+                            <h4 className={`text-xs font-bold uppercase mb-1 ${getFinalPrice() > 0 ? 'text-amber-400' : 'text-emerald-400'}`}>Status Wilayah</h4>
+                            <p className="text-xs text-slate-400 leading-relaxed">
+                              {getFinalPrice() > 0 ? 'Area Kabupaten Malang dikenakan biaya tambahan sesuai jarak.' : 'Wilayah ini tercover area FREE ONGKIR Malang Kota.'}
+                            </p>
+                        </div>
+                    </div>
+
+                    <button onClick={() => setShowPopup(false)} className="w-full mt-6 bg-slate-800 hover:bg-slate-700 text-white font-bold py-4 rounded-2xl transition-all">Tutup</button>
+                 </div>
               </motion.div>
             </div>
           )}
         </AnimatePresence>
 
-        {/* --- FOOTER (COMPACT) --- */}
-        <footer className="shrink-0 p-3 text-center pb-10">
-          <div className="space-y-0.5 mb-2 text-slate-400/60">
-            <h3 className="font-bold text-slate-300 text-xs tracking-wide">Workshop Malang Florist Group</h3>
-            <p className="text-[10px] font-light">Jl. Candi Bajangratu 1 Selatan No 16 B - Kota Malang</p>    
-          </div>
-
-          <div className="flex justify-between items-center px-4 border-t border-white/5 pt-2">
-            <button onClick={() => setIsAdminOpen(true)} className="w-8 h-8 flex items-center justify-center rounded-xl text-slate-600 hover:text-emerald-400 hover:bg-emerald-500/10 hover:shadow-[0_0_15px_rgba(16,185,129,0.2)] transition-all duration-300"><Lock size={14} /></button>
-            <div className="flex flex-col items-center">
-                <span className="text-[9px] text-slate-600 font-mono tracking-widest">v2.1.3 FUTURA</span>
-                <span className="text-[7px] text-emerald-500/60 font-bold uppercase tracking-wider mt-0.5">Created By Malang Florist Group</span>
-            </div>
-            <div className="w-8 flex justify-center">
-               {isFirebaseReady ? <Cloud size={12} className="text-emerald-500 animate-pulse" title="Cloud Connected" /> : <CloudOff size={12} className="text-slate-700" title="Local Mode" />}
-            </div>
-          </div>
+        {/* --- FOOTER --- */}
+        <footer className="shrink-0 p-4 pb-10 bg-slate-900/60 backdrop-blur-md border-t border-white/5 relative z-20">
+           <div className="flex justify-between items-center px-2">
+             <div className="flex items-center gap-2">
+                <button onClick={() => setIsAdminOpen(true)} className="p-2 text-slate-500 hover:text-emerald-500 transition-colors"><Settings size={18} /></button>
+                <div className="h-4 w-[1px] bg-slate-700"></div>
+                <div className="flex flex-col">
+                    <span className="text-[10px] font-bold text-slate-300">MFG SYSTEM v2.5</span>
+                    <span className="text-[8px] text-slate-500">{isFirebaseReady ? 'Online Mode' : 'Offline Mode'}</span>
+                </div>
+             </div>
+             <div>
+                {isFirebaseReady ? <Cloud size={16} className="text-emerald-500" /> : <CloudOff size={16} className="text-slate-600" />}
+             </div>
+           </div>
         </footer>
 
       </div>
 
-      {/* --- ADMIN MODAL --- */}
+      {/* --- ADMIN MODAL (KEPT FUNCTIONAL, REDESIGNED) --- */}
       <AnimatePresence>
         {isAdminOpen && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-50 bg-black/80 backdrop-blur-xl flex items-center justify-center p-4">
-            <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className={`bg-slate-900 w-full max-w-sm rounded-[2rem] overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.5)] border border-slate-700 flex flex-col max-h-[85vh] transition-all duration-500 ${isAuthenticated ? 'h-[85vh]' : 'h-auto py-6'}`}>
-              <div className="bg-slate-950 p-5 flex justify-between items-center shrink-0 border-b border-slate-800">
-                <div className="flex items-center gap-3">
-                    <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_10px_rgba(16,185,129,1)]"></div>
-                    <div className="flex flex-col">
-                        <h2 className="text-white font-bold text-sm tracking-[0.2em]">ADMIN CONSOLE</h2>
-                        {isAuthenticated && loggedInUser && (<span className="text-[10px] text-emerald-500 font-medium">Hello, {loggedInUser.name}</span>)}
-                    </div>
-                </div>
-                <button onClick={handleCloseAdmin} className="text-slate-500 hover:text-white transition-colors"><X size={20} /></button>
+          <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
+            <motion.div 
+                initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.9, opacity: 0 }}
+                className="bg-slate-900 w-full max-w-sm max-h-[90vh] rounded-3xl border border-slate-700 shadow-2xl flex flex-col overflow-hidden"
+            >
+              {/* ADMIN HEADER */}
+              <div className="p-5 border-b border-slate-800 flex justify-between items-center bg-slate-950">
+                  <div className="flex items-center gap-3">
+                      <div className="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,1)] animate-pulse"></div>
+                      <div>
+                          <h2 className="text-sm font-bold text-white tracking-widest">ADMIN PANEL</h2>
+                          {isAuthenticated && loggedInUser && <span className="text-[10px] text-emerald-500">Hi, {loggedInUser.name}</span>}
+                      </div>
+                  </div>
+                  <button onClick={handleCloseAdmin} className="text-slate-500 hover:text-white"><X size={20} /></button>
               </div>
 
-              <div className="p-4 flex-1 flex flex-col min-h-0 overflow-hidden relative bg-slate-900">
+              {/* ADMIN CONTENT */}
+              <div className="flex-1 overflow-y-auto custom-scrollbar p-0 bg-slate-900 relative">
                 {!isAuthenticated ? (
-                  <div className="space-y-6 px-4">
-                    <div className="text-center mb-6">
-                        <div className="w-16 h-16 bg-slate-800 rounded-full flex items-center justify-center mx-auto mb-4 text-emerald-500 shadow-inner"><Lock size={30} /></div>
-                        <p className="text-sm text-slate-400 font-medium tracking-wide">Security Access Required</p>
+                  <div className="p-8 flex flex-col items-center justify-center h-full space-y-6">
+                    <div className="w-20 h-20 bg-slate-800 rounded-full flex items-center justify-center text-emerald-500 shadow-inner"><Lock size={32} /></div>
+                    <div className="w-full space-y-4">
+                        <input type="password" placeholder="Passcode" className="w-full bg-slate-950 border border-slate-800 rounded-xl p-4 text-center text-white font-bold tracking-[0.5em] focus:border-emerald-500 focus:outline-none" value={passwordInput} onChange={(e) => setPasswordInput(e.target.value)} />
+                        <button onClick={handleLogin} className="w-full bg-emerald-600 hover:bg-emerald-500 text-white py-4 rounded-xl font-bold tracking-widest shadow-lg shadow-emerald-900/50">ACCESS</button>
                     </div>
-                    <input type="password" className="w-full bg-slate-950 border border-slate-700 text-white p-4 rounded-xl text-center font-bold tracking-[0.5em] focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500 transition-all placeholder:tracking-normal placeholder:text-slate-600" placeholder="••••••••" value={passwordInput} onChange={(e) => setPasswordInput(e.target.value)} />
-                    <button onClick={handleLogin} className="w-full bg-emerald-600 hover:bg-emerald-500 text-white py-4 rounded-xl font-bold tracking-wider shadow-lg shadow-emerald-900/50 transition-all">UNLOCK SYSTEM</button>
                   </div>
                 ) : (
-                  <div className="flex flex-col h-full min-h-0">
-                    <div className="flex p-1 bg-slate-800 rounded-xl mb-6 shrink-0">
-                        <button onClick={() => setActiveTab('dashboard')} className={`flex-1 py-3 text-[10px] font-bold rounded-lg transition-all ${activeTab === 'dashboard' ? 'bg-slate-700 text-emerald-400 shadow-lg' : 'text-slate-500 hover:text-slate-300'}`}>Fitur Utama</button>
-                        <button onClick={() => setActiveTab('list')} className={`flex-1 py-3 text-[10px] font-bold rounded-lg transition-all ${activeTab === 'list' ? 'bg-slate-700 text-emerald-400 shadow-lg' : 'text-slate-500 hover:text-slate-300'}`}>Data Harga</button>
-                        <button onClick={() => setActiveTab('users')} className={`flex-1 py-3 text-[10px] font-bold rounded-lg transition-all ${activeTab === 'users' ? 'bg-slate-700 text-emerald-400 shadow-lg' : 'text-slate-500 hover:text-slate-300'}`}>User Admin</button>
+                  <div className="flex flex-col h-full">
+                    {/* TABS */}
+                    <div className="flex p-2 bg-slate-950 border-b border-slate-800 sticky top-0 z-10">
+                        {['dashboard', 'list', 'users'].map((tab) => (
+                            <button key={tab} onClick={() => setActiveTab(tab)} className={`flex-1 py-2 text-[10px] font-bold uppercase rounded-lg transition-all ${activeTab === tab ? 'bg-slate-800 text-emerald-400' : 'text-slate-500'}`}>
+                                {tab === 'list' ? 'Harga' : tab}
+                            </button>
+                        ))}
                     </div>
 
-                    <div className="flex-1 overflow-y-auto pr-1 custom-scrollbar min-h-0 pb-20">
+                    <div className="p-5 pb-24 space-y-6">
+                        {/* DASHBOARD TAB */}
                         {activeTab === 'dashboard' && (
                             <div className="space-y-4">
-                                <div className="border border-slate-700 bg-slate-800/50 rounded-2xl p-5 flex justify-between items-center">
+                                <div className="bg-slate-800 p-4 rounded-2xl flex justify-between items-center border border-slate-700">
                                     <div>
                                         <h4 className="font-bold text-white text-sm">Gratis Ongkir Global</h4>
-                                        <p className="text-[10px] text-slate-400 mt-1">Aktifkan untuk semua wilayah</p>
+                                        <p className="text-[10px] text-slate-400">Aktifkan untuk semua user</p>
                                     </div>
-                                    <button onClick={handleToggleFreeShipping} className={`w-14 h-8 rounded-full p-1 transition-colors duration-300 ${globalFreeShipping ? 'bg-emerald-500' : 'bg-slate-700'}`}>
-                                        <div className={`w-6 h-6 bg-white rounded-full shadow-md transform transition-transform duration-300 ${globalFreeShipping ? 'translate-x-6' : 'translate-x-0'}`}></div>
+                                    <button onClick={handleToggleFreeShipping} className={`w-12 h-7 rounded-full p-1 transition-all ${globalFreeShipping ? 'bg-emerald-500' : 'bg-slate-600'}`}>
+                                        <div className={`w-5 h-5 bg-white rounded-full shadow-md transform transition-transform ${globalFreeShipping ? 'translate-x-5' : 'translate-x-0'}`}></div>
                                     </button>
                                 </div>
-                                <div className="bg-emerald-900/20 p-5 rounded-2xl border border-emerald-500/20">
-                                    <h4 className="font-bold text-emerald-400 text-sm mb-2">System Metrics</h4>
-                                    <div className="grid grid-cols-2 gap-4">
-                                        <div className="bg-slate-900/50 p-3 rounded-xl border border-emerald-500/10">
-                                            <p className="text-[10px] text-emerald-600 uppercase">Kecamatan</p>
-                                            <p className="text-xl font-bold text-emerald-400">{data.length}</p>
-                                        </div>
-                                        <div className="bg-slate-900/50 p-3 rounded-xl border border-emerald-500/10">
-                                            <p className="text-[10px] text-emerald-600 uppercase">Desa/Kel</p>
-                                            <p className="text-xl font-bold text-emerald-400">{data.reduce((acc, curr) => acc + curr.villages.length, 0)}</p>
-                                        </div>
+                                <div className="grid grid-cols-2 gap-3">
+                                    <div className="bg-slate-800 p-4 rounded-2xl border border-slate-700 text-center">
+                                        <p className="text-[10px] text-slate-500 uppercase font-bold">Total Wilayah</p>
+                                        <p className="text-2xl font-bold text-white">{data.length}</p>
+                                    </div>
+                                    <div className="bg-slate-800 p-4 rounded-2xl border border-slate-700 text-center">
+                                        <p className="text-[10px] text-slate-500 uppercase font-bold">Total Desa</p>
+                                        <p className="text-2xl font-bold text-white">{data.reduce((acc, curr) => acc + curr.villages.length, 0)}</p>
                                     </div>
                                 </div>
-                                <button onClick={handleLogout} className="w-full bg-rose-500/10 text-rose-500 border border-rose-500/30 p-4 rounded-xl flex items-center justify-center gap-2 hover:bg-rose-500 hover:text-white transition-all text-xs font-bold">
-                                    <LogOut size={16} /> LOGOUT SYSTEM
-                                </button>
+                                <button onClick={handleLogout} className="w-full bg-rose-500/10 text-rose-500 border border-rose-500/30 p-4 rounded-xl flex items-center justify-center gap-2 font-bold text-xs mt-4"><LogOut size={14} /> LOGOUT</button>
                             </div>
                         )}
 
+                        {/* LIST HARGA TAB */}
                         {activeTab === 'list' && (
                             <div className="space-y-3">
-                                {data.map((item, index) => (
-                                    <div key={item.id} className="border border-slate-700 rounded-xl overflow-hidden bg-slate-800/30">
-                                        <button onClick={() => toggleKecamatan(item.id)} className="w-full flex justify-between items-center p-4 bg-slate-800 hover:bg-slate-750 transition-colors border-b border-transparent hover:border-slate-700">
-                                            <div className="flex items-center gap-4">
-                                                <span className="w-6 h-6 rounded bg-slate-700 text-emerald-400 text-[10px] flex items-center justify-center font-bold font-mono">{index + 1}</span>
-                                                <div className="text-left">
-                                                    <p className="text-xs font-bold text-white uppercase tracking-wide">{item.name}</p>
-                                                    <p className="text-[9px] text-slate-500 mt-0.5">{item.villages.length} Desa/Kelurahan</p>
-                                                </div>
-                                            </div>
-                                            <ChevronRight size={16} className={`text-slate-500 transition-transform ${expandedKecamatan === item.id ? 'rotate-90 text-emerald-400' : ''}`} />
+                                {data.map((item) => (
+                                    <div key={item.id} className="bg-slate-800 rounded-xl overflow-hidden border border-slate-700">
+                                        <button onClick={() => toggleKecamatan(item.id)} className="w-full p-4 flex justify-between items-center text-left hover:bg-slate-700 transition-colors">
+                                            <span className="font-bold text-xs uppercase text-white">{item.name} <span className="text-[9px] text-slate-500 font-normal ml-1">({item.villages.length} desa)</span></span>
+                                            <ChevronRight size={14} className={`text-slate-500 transition-transform ${expandedKecamatan === item.id ? 'rotate-90 text-emerald-500' : ''}`} />
                                         </button>
-                                        <AnimatePresence>
-                                            {expandedKecamatan === item.id && (
-                                                <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="border-t border-slate-700 bg-slate-900/50">
-                                                    {item.villages.sort((a,b) => a.name.localeCompare(b.name)).map((village, vIdx) => (
-                                                        <div key={vIdx} className="flex justify-between items-center px-4 py-3 border-b border-slate-800 last:border-0 hover:bg-white/5 transition-colors group">
-                                                            <div className="flex items-center gap-3 overflow-hidden">
-                                                                <span className="text-[10px] text-slate-600 font-mono w-4 group-hover:text-emerald-500">{vIdx + 1}.</span>
-                                                                <span className="text-xs text-slate-300 truncate">{village.name}</span>
-                                                            </div>
-                                                            <div className="flex items-center gap-2 shrink-0">
-                                                                <span className="text-[10px] text-slate-500">Rp</span>
-                                                                <input type="number" value={village.price} onChange={(e) => handleUpdateVillagePrice(item.id, village.name, e.target.value)} className="w-20 text-right text-xs font-bold border border-slate-700 rounded-lg p-1.5 focus:ring-1 focus:ring-emerald-500 focus:border-emerald-500 focus:outline-none bg-slate-950 text-emerald-400 placeholder-slate-700" />
-                                                            </div>
+                                        {expandedKecamatan === item.id && (
+                                            <div className="bg-slate-900 border-t border-slate-700 p-2 space-y-1">
+                                                {item.villages.sort((a,b) => a.name.localeCompare(b.name)).map((village, idx) => (
+                                                    <div key={idx} className="flex justify-between items-center p-2 rounded hover:bg-white/5">
+                                                        <span className="text-[10px] text-slate-300 w-1/2 truncate">{village.name}</span>
+                                                        <div className="flex items-center gap-2">
+                                                            <span className="text-[10px] text-slate-500">Rp</span>
+                                                            <input type="number" className="w-16 bg-slate-950 border border-slate-700 rounded p-1 text-right text-[10px] text-white focus:border-emerald-500 focus:outline-none" value={village.price} onChange={(e) => handleUpdateVillagePrice(item.id, village.name, e.target.value)} />
                                                         </div>
-                                                    ))}
-                                                </motion.div>
-                                            )}
-                                        </AnimatePresence>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        )}
                                     </div>
                                 ))}
                             </div>
                         )}
 
+                        {/* USERS TAB */}
                         {activeTab === 'users' && (
-                            <div className="space-y-6">
-                                <div className="bg-slate-800/50 p-5 rounded-2xl border border-slate-700 relative overflow-hidden">
-                                     <div className="absolute -top-10 -right-10 w-24 h-24 bg-emerald-500/10 rounded-full blur-2xl"></div>
-                                    <h4 className="text-xs font-bold text-slate-400 uppercase mb-4 flex items-center gap-2 tracking-wider relative z-10"><Plus size={14} className="text-emerald-500" /> Tambah Admin Baru</h4>
-                                    <div className="space-y-3 relative z-10">
-                                        <input type="text" placeholder="Username" className="w-full bg-slate-900 text-xs border border-slate-700 rounded-xl p-3 focus:outline-none focus:border-emerald-500 text-white placeholder-slate-600" value={newUser} onChange={(e) => setNewUser(e.target.value)} />
+                             <div className="space-y-6">
+                                <div className="bg-slate-800 p-4 rounded-2xl border border-slate-700">
+                                    <h5 className="text-[10px] font-bold text-slate-400 uppercase mb-3 flex items-center gap-2"><Plus size={12} className="text-emerald-500" /> Tambah User</h5>
+                                    <div className="space-y-2">
+                                        <input type="text" placeholder="Username" className="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-xs text-white" value={newUser} onChange={(e) => setNewUser(e.target.value)} />
                                         <div className="flex gap-2">
-                                            <input type="text" placeholder="Password (Login Access)" className="flex-1 bg-slate-900 text-xs border border-slate-700 rounded-xl p-3 focus:outline-none focus:border-emerald-500 text-white placeholder-slate-600" value={newPass} onChange={(e) => setNewPass(e.target.value)} />
-                                            <select value={newRole} onChange={(e) => setNewRole(e.target.value)} className="bg-slate-900 text-xs border border-slate-700 rounded-xl p-3 focus:outline-none focus:border-emerald-500 text-white w-24">
-                                                <option value="Staff">Staff</option>
-                                                <option value="Admin">Admin</option>
-                                                <option value="Manager">Manager</option>
-                                            </select>
+                                            <input type="text" placeholder="Password" className="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-xs text-white" value={newPass} onChange={(e) => setNewPass(e.target.value)} />
+                                            <select value={newRole} onChange={(e) => setNewRole(e.target.value)} className="bg-slate-900 border border-slate-700 rounded-lg p-2 text-xs text-white"><option>Staff</option><option>Admin</option></select>
                                         </div>
-                                        <button onClick={handleAddUser} className="w-full bg-slate-700 hover:bg-emerald-600 text-white text-xs font-bold py-3 rounded-xl transition-all shadow-lg shadow-slate-900/20">Simpan Akses</button>
+                                        <button onClick={handleAddUser} className="w-full bg-emerald-600 text-white text-xs font-bold py-2 rounded-lg">Simpan</button>
                                     </div>
                                 </div>
-
                                 <div className="space-y-2">
-                                    <h4 className="text-[10px] font-bold text-slate-500 uppercase ml-1 tracking-wider">Daftar Admin Aktif ({adminUsers.length})</h4>
-                                    {adminUsers.map((user) => (
-                                        <div key={user.id} className="bg-slate-800 p-4 rounded-xl border border-slate-700 flex justify-between items-center group hover:border-slate-600 transition-colors">
-                                            <div className="flex items-center gap-4">
-                                                <div className="w-10 h-10 rounded-full bg-slate-700 flex items-center justify-center text-slate-400 group-hover:text-white group-hover:bg-slate-600 transition-colors"><Users size={18} /></div>
-                                                <div>
-                                                    <p className="text-xs font-bold text-white">{user.name}</p>
-                                                    <div className="flex gap-2 items-center mt-1">
-                                                        <p className="text-[9px] text-emerald-500 uppercase tracking-wider bg-emerald-500/10 px-2 py-0.5 rounded">{user.role}</p>
-                                                        <p className="text-[9px] text-slate-600 font-mono">Pass: ••••••</p>
-                                                    </div>
-                                                </div>
+                                    {adminUsers.map(user => (
+                                        <div key={user.id} className="flex justify-between items-center p-3 bg-slate-800 rounded-xl border border-slate-700">
+                                            <div>
+                                                <p className="text-xs font-bold text-white">{user.name}</p>
+                                                <p className="text-[10px] text-emerald-500">{user.role}</p>
                                             </div>
-                                            <button onClick={() => handleDeleteUser(user.id)} className="w-8 h-8 flex items-center justify-center text-slate-600 hover:text-rose-400 hover:bg-rose-500/10 rounded-lg transition-colors" title="Hapus User"><Trash2 size={16} /></button>
+                                            <button onClick={() => handleDeleteUser(user.id)} className="text-slate-500 hover:text-rose-500"><Trash2 size={14} /></button>
                                         </div>
                                     ))}
                                 </div>
-                            </div>
+                             </div>
                         )}
                     </div>
                     
+                    {/* SAVE BUTTON FLOATING */}
                     <AnimatePresence>
-                      {hasChanges && (
-                        <motion.div initial={{ y: 50, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: 50, opacity: 0 }} className="absolute bottom-6 left-6 right-6 z-20">
-                          <button onClick={handleSaveChanges} className="w-full bg-emerald-500 text-black py-4 rounded-xl font-bold shadow-[0_0_20px_rgba(16,185,129,0.4)] flex items-center justify-center gap-2 hover:bg-emerald-400 hover:scale-105 transition-all"><Save size={18} /> SIMPAN PERUBAHAN</button>
-                        </motion.div>
-                      )}
+                        {hasChanges && (
+                            <motion.div initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} className="absolute bottom-5 left-5 right-5">
+                                <button onClick={handleSaveChanges} className="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-900 font-bold py-3 rounded-xl shadow-lg flex items-center justify-center gap-2"><Save size={16} /> SIMPAN PERUBAHAN</button>
+                            </motion.div>
+                        )}
                     </AnimatePresence>
-
                   </div>
                 )}
               </div>
             </motion.div>
-          </motion.div>
+          </div>
         )}
       </AnimatePresence>
 
       <style>{`
-        @keyframes shimmer {
-          0% { transform: translateX(-100%); }
-          100% { transform: translateX(100%); }
-        }
-        .custom-scrollbar::-webkit-scrollbar {
-          width: 4px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-track {
-          background: #0f172a; 
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-          background: #334155; 
-          border-radius: 4px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-          background: #475569; 
-        }
+        .custom-scrollbar::-webkit-scrollbar { width: 0px; }
       `}</style>
     </div>
   );
